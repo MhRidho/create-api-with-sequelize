@@ -55,10 +55,29 @@ const deleteteProduct = async (req, res) => {
 
 // 6. Get published product
 const getPublishedProduct = async (req, res) => {
-    const products = await Product.findAll({where: {published: true}})
-    res.send(products)
+    const products = await Product.findAll({ where: { published: true } })
+    res.json({
+        products,
+        response: 'testing'
+    })
+}
+
+// 7. Connect one to many relation product and reviews
+const getProductReviews = async (req, res) => {
+    const data = await Product.findAll({
+        include: [{
+            model: Review,
+            as: 'review'
+        }],
+        where: { id : 2 }
+    })
+    res.json({
+        success: true,
+        message: 'List all product reviews',
+        results: data
+    })
 }
 
 module.exports = {
-    addProduct, getAllProducts, getProductById, updateProduct, deleteteProduct, getPublishedProduct
+    addProduct, getAllProducts, getProductById,  updateProduct, deleteteProduct, getPublishedProduct, getProductReviews
 }
